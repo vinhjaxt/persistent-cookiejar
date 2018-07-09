@@ -8,7 +8,7 @@
 
 `import "github.com/vinhjaxt/persistent-cookiejar"`
 
-# if got an error save cookies, pls remove github.com/juju/go4 then reinstall
+# if got an error save cookies, pls remove github.com/juju/go4 in GOPATH folder (%GOPATH% or $GOPATH) then reinstall
 
 # cookiejar
 --
