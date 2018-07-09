@@ -2,7 +2,7 @@
 
 # install
 
-go get github.com/vinhjaxt/persistent-cookiejar
+go get -u github.com/vinhjaxt/persistent-cookiejar
 
 # usage
 
