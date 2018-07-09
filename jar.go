@@ -72,6 +72,9 @@ type Options struct {
 	// (useful for tests). If this is true, the value of Filename will be
 	// ignored.
 	NoPersist bool
+	
+	// Session cookie will be stored too
+	Session bool
 }
 
 // Jar implements the http.CookieJar interface from the net/http package.
@@ -87,6 +90,9 @@ type Jar struct {
 	// entries is a set of entries, keyed by their eTLD+1 and subkeyed by
 	// their name/domain/path.
 	entries map[string]map[string]entry
+
+	// Session cookie will be stored too
+	Session bool
 }
 
 var noOptions Options
@@ -119,7 +125,12 @@ func newAtTime(o *Options, now time.Time) (*Jar, error) {
 			return nil, errgo.Notef(err, "cannot load cookies")
 		}
 	}
-	jar.deleteExpired(now)
+	if o.Session {
+		jar.Session = o.Session;
+	}
+	if !jar.Session {
+		jar.deleteExpired(now)
+	}
 	return jar, nil
 }
 
@@ -391,6 +402,9 @@ var expiryRemovalDuration = 24 * time.Hour
 // that we can actually expect there to be no external copies of it that
 // might resurrect the dead cookie.
 func (j *Jar) deleteExpired(now time.Time) {
+	if !j.Session {
+		return
+	}
 	for tld, submap := range j.entries {
 		for id, e := range submap {
 			if !e.Expires.After(now) && !e.Updated.Add(expiryRemovalDuration).After(now) {
