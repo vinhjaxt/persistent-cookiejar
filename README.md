@@ -1,3 +1,15 @@
+# Forked from github.com/juju/persistent-cookiejar
+
+# install
+
+go get github.com/vinhjaxt/persistent-cookiejar
+
+# usage
+
+import "github.com/vinhjaxt/persistent-cookiejar"
+
+# if got an error save cookies, pls remove github.com/juju/go4 then reinstall
+
 # cookiejar
 --
     import "github.com/juju/persistent-cookiejar"
