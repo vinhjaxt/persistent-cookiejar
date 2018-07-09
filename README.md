@@ -2,11 +2,11 @@
 
 # install
 
-go get -u github.com/vinhjaxt/persistent-cookiejar
+`go get -u github.com/vinhjaxt/persistent-cookiejar`
 
 # usage
 
-import "github.com/vinhjaxt/persistent-cookiejar"
+`import "github.com/vinhjaxt/persistent-cookiejar"`
 
 # if got an error save cookies, pls remove github.com/juju/go4 then reinstall
 
