@@ -29,16 +29,6 @@ func (j *Jar) Save() error {
 	return j.save(time.Now())
 }
 
-// MarshalJSON implements json.Marshaler by encoding all persistent cookies
-// currently in the jar.
-func (j *Jar) MarshalJSON() ([]byte, error) {
-	j.mu.Lock()
-	defer j.mu.Unlock()
-	// Marshaling entries can never fail.
-	data, _ := json.Marshal(j.allPersistentEntries())
-	return data, nil
-}
-
 // save is like Save but takes the current time as a parameter.
 func (j *Jar) save(now time.Time) error {
 	locked, err := lockFile(lockFileName(j.filename))
@@ -60,7 +50,9 @@ func (j *Jar) save(now time.Time) error {
 		// The cookie file is probably corrupt.
 		log.Printf("cannot read cookie file to merge it; ignoring it: %v", err)
 	}
-	j.deleteExpired(now)
+	if !j.Session {
+		j.deleteExpired(now)
+	}
 	if err := f.Truncate(0); err != nil {
 		return errgo.Notef(err, "cannot truncate file")
 	}
@@ -137,7 +129,8 @@ func (j *Jar) allPersistentEntries() []entry {
 	var entries []entry
 	for _, submap := range j.entries {
 		for _, e := range submap {
-			if e.Persistent {
+// Edited by VinhNoName
+			if e.Persistent || j.Session {
 				entries = append(entries, e)
 			}
 		}
